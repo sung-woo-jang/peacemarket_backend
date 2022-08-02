@@ -7,21 +7,17 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { v4 } from 'uuid';
 import {
   BaseEntity,
-  BeforeInsert,
   Column,
   CreateDateColumn,
   Entity,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 import { UserRole } from './user.role.enum';
 
 @Entity()
-@Unique(['email', 'nickname'])
+// @Unique(['email', 'nickname'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -47,6 +43,7 @@ export class User extends BaseEntity {
   @Column({ type: 'varchar' })
   @IsString()
   @IsNotEmpty()
+  @IsMobilePhone('ko-KR')
   phoneNumber: string;
 
   @Column({
@@ -70,9 +67,4 @@ export class User extends BaseEntity {
   @Column()
   @IsNotEmpty()
   role: UserRole;
-
-  // @BeforeInsert()
-  // addId() {
-  //   this.id = v4();
-  // }
 }
