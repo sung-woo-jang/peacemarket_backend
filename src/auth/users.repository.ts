@@ -6,7 +6,7 @@ import * as bcrypt from 'bcryptjs';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-  async signUp(createUserDto: CreateUserDto) {
+  async signUp(createUserDto: CreateUserDto, signupVerifyToken: string) {
     const { email, password, nickname, phoneNumber } = createUserDto;
 
     const salt = await bcrypt.genSalt(10);
@@ -16,6 +16,7 @@ export class UserRepository extends Repository<User> {
       email,
       password: hashedPassword,
       nickname,
+      signupVerifyToken,
       phoneNumber,
       role: UserRole.USER,
     }).save();
