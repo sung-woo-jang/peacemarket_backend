@@ -54,6 +54,9 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   imgUrl: string;
 
+  @Column({ type: 'uuid' })
+  signupVerifyToken: string;
+
   @Column({ default: false })
   @IsString()
   @IsNotEmpty()
