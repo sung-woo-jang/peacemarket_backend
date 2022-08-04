@@ -1,11 +1,11 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './entities/user.entity';
 import { UserRole } from './entities/user.role.enum';
 import * as bcrypt from 'bcryptjs';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @EntityRepository(User)
-export class UserRepository extends Repository<User> {
+export class UsersRepository extends Repository<User> {
   async signUp(createUserDto: CreateUserDto, signupVerifyToken: string) {
     const { email, password, nickname, phoneNumber } = createUserDto;
 
