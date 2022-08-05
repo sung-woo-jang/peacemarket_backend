@@ -13,16 +13,16 @@ import {
   CreateDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { UserRole } from './user.role.enum';
 
 @Entity()
-// @Unique(['email', 'nickname'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', unique: true })
   @IsEmail()
   @IsString()
   @IsNotEmpty()
@@ -35,12 +35,12 @@ export class User extends BaseEntity {
   @MaxLength(20)
   password: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', unique: true })
   @IsString()
   @IsNotEmpty()
   nickname: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', unique: true })
   @IsString()
   @IsNotEmpty()
   @IsMobilePhone('ko-KR')
