@@ -24,6 +24,12 @@ export class UsersService {
   async signUp(createUserDto: CreateUserDto) {
     const signupVerifyToken = uuid.v1();
 
+    await this.usersRepository.checkUserExists(
+      createUserDto.email,
+      createUserDto.nickname,
+      createUserDto.phoneNumber,
+    );
+
     await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
     return await this.usersRepository.signUp(createUserDto, signupVerifyToken);
   }
@@ -36,8 +42,6 @@ export class UsersService {
   }
 
   async verifyEmail(signupVerifyToken: string): Promise<string> {
-    // TODO
-    // 1. DB에서 signupVerifyToken으로 회원 가입 처리중인 유저가 있는지 조회하고 없다면 에러 처리
     const user = await this.usersRepository.findOne({ signupVerifyToken });
     if (!user) throw new NotFoundException('유저가 존재하지 않습니다.');
 
@@ -46,7 +50,6 @@ export class UsersService {
       email: user.email,
       nickname: user.nickname,
     });
-    // 2. 바로 로그인 상태가 되도록 JWT를 발급
   }
 
   async login(loginRequestDto: LoginRequestDto) {
