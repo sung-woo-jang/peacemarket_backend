@@ -5,7 +5,7 @@ import { Injectable } from '@nestjs/common';
 export class EmailService {
   constructor(private readonly mailerService: MailerService) {}
   async sendMemberJoinVerification(email: string, signupVerifyToken: string) {
-    const URL = `${process.env.BASE_URL}auth/email-verify?signupVerifyToken=${signupVerifyToken}`;
+    const URL = `https://${process.env.BASE_URL}users/email-verify?signupVerifyToken=${signupVerifyToken}`;
 
     const mailOptions = {
       to: email, // list of receivers
