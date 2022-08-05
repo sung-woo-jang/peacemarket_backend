@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { EmailModule } from './email/email.module';
 import { UsersModule } from './users/users.module';
 import { ExceptionModule } from './exception/exception.module';
+import { InterceptorModule } from './interceptor/interceptor.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ExceptionModule } from './exception/exception.module';
     EmailModule,
     UsersModule,
     ExceptionModule,
+    InterceptorModule,
   ],
 })
 export class AppModule {}
