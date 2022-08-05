@@ -4,7 +4,6 @@ import {
   Body,
   Query,
   Get,
-  Headers,
   Param,
   UseGuards,
 } from '@nestjs/common';
@@ -12,15 +11,11 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { LoginRequestDto } from './dto/login-request.dto';
-import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from 'src/guard/auth.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-    private authService: AuthService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   signUp(@Body() createUserDto: CreateUserDto) {
