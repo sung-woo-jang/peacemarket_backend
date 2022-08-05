@@ -49,10 +49,9 @@ export class UsersService {
     // 2. 바로 로그인 상태가 되도록 JWT를 발급
   }
 
-  async login(loginRequestDto: LoginRequestDto): Promise<string> {
+  async login(loginRequestDto: LoginRequestDto) {
     const { email, password } = loginRequestDto;
     const user = await this.usersRepository.findOne({ email });
-
     if (user && (await bcrypt.compare(password, user.password))) {
       return this.authService.login({
         id: user.id,
@@ -60,5 +59,19 @@ export class UsersService {
         nickname: user.nickname,
       });
     } else throw new UnauthorizedException('로그인 실패');
+  }
+
+  async getUserInfo(userId: string) {
+    const user = await this.usersRepository.findOne({ id: userId });
+
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다');
+    }
+
+    return {
+      id: user.id,
+      nickname: user.nickname,
+      email: user.email,
+    };
   }
 }
