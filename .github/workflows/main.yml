@@ -18,19 +18,6 @@ jobs:
       - name: 소스코드로 체크아웃 합니다. # 레포지토리 체크아웃
         uses: actions/checkout@v3
 
-      - name: Set Node.js 16.x
-        uses: actions/setup-node@v2.4.1
-        with:
-          node-version: 16.x
-
-      - name: Server npm install
-        # working-directory: /home/peacemarket/peacemarket_backend
-        run: npm install
-
-      - name: Server Build
-        run: npm run build
-        # working-directory: /home/peacemarket/peacemarket_backend
-
       - name: clean-up deploy server
         uses: appleboy/ssh-action@master
         with:
@@ -40,28 +27,10 @@ jobs:
           key: ${{secrets.KEY}}
           port: ${{ secrets.PORT }}
           script: |
-            rm -rf /home/peacemarket/peacemarket_backend/
-
-      - name: copy server file to deploy server
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          # password: ${{ secrets.PASSWORD }}
-          key: ${{secrets.KEY}}
-          port: ${{ secrets.PORT }}
-          source: '/dist'
-          target: '/home/peacemarket/peacemarket_backend'
-
-      - name: start app server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          # password: ${{ secrets.PASSWORD }}
-          key: ${{secrets.KEY}}
-          port: ${{ secrets.PORT }}
-          script: |
-            cd /home/peacemarket/peacemarket_backend/dist
-            pm2 start main.js
-            pm2 reload main.js
+            cd /home/peacemarket/peacemarket_backend
+            git pull origin
+            npm install --legacy-peer-deps
+            rm -rf /home/peacemarket/peacemarket_backend/dist
+            npm run build
+            pm2 kill
+            pm2 start /home/peacemarket/peacemarket_backend/dist/main.js
