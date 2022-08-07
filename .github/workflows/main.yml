@@ -24,12 +24,12 @@ jobs:
           node-version: 16.x
 
       - name: Server npm install
-        working-directory: /home/peacemarket/peacemarket_backend
+        # working-directory: /home/peacemarket/peacemarket_backend
         run: npm install
 
       - name: Server Build
         run: npm run build
-        working-directory: /home/peacemarket/peacemarket_backend
+        # working-directory: /home/peacemarket/peacemarket_backend
 
       - name: clean-up deploy server
         uses: appleboy/ssh-action@master
