@@ -1,0 +1,54 @@
+name: back-end CI & CD
+
+on:
+  # "master" branch에 대해서만 push 또는 pull_request 이벤트에 대해 워크플로우를 트리거합니다.
+  push:
+    branches: ['develop']
+  pull_request:
+    branches: ['develop']
+
+# 워크플로 실행은 순차적으로 또는 병렬로 실행할 수 있는 하나 이상의 작업으로 구성됩니다.
+jobs:
+  # 이 워크플로우는 "빌드"라는 단일 작업을 포함합니다.
+  build:
+    # 작업이 실행될 러너의 유형
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 소스코드로 체크아웃 합니다. # 레포지토리 체크아웃
+        uses: actions/checkout@master
+
+      - name: npm 모듈들을 캐싱합니다.
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+
+      - name: npm 으로 패키지 다운로드합니다.
+        run: npm install
+
+      - name: 리액트 파일을 빌드합니다.
+        run: npm run build
+
+      - name: 기존에 배포된 파일 삭제합니다.
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }} # server ip
+          username: ${{ secrets.USERNAME }} # 사용자 이름 ubuntu
+          key: ${{ secrets.KEY }} # -----END OPENSSH PRIVATE KEY-----
+          port: ${{secrets.PORT}}
+          script: |
+            cd /home/peacemarket/peacemarket_backend
+            git pull origin develop
+            rm -rf /home/peacemarket/peacemarket_backend/dist
+      - name: 빌드 된 파일 scp를 통해 배포합니다.
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          port: ${{secrets.PORT}}
+          source: 'dist'
+          target: '/home/peacemarket/peacemarket_backend/'
