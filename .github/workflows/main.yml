@@ -1,7 +1,7 @@
 name: back-end CI & CD
 
 on:
-  # "master" branch에 대해서만 push 또는 pull_request 이벤트에 대해 워크플로우를 트리거합니다.
+  # "develop" branch에 대해서만 push 또는 pull_request 이벤트에 대해 워크플로우를 트리거합니다.
   push:
     branches: ['develop']
   pull_request:
@@ -16,44 +16,52 @@ jobs:
 
     steps:
       - name: 소스코드로 체크아웃 합니다. # 레포지토리 체크아웃
-        uses: actions/checkout@master
+        uses: actions/checkout@v3
 
-      - name: npm 모듈들을 캐싱합니다.
-        uses: actions/cache@v2
+      - name: Set Node.js 16.x
+        uses: actions/setup-node@v2.4.1
         with:
-          path: node_modules
-          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          node-version: 16.x
 
-      - name: npm 으로 패키지 다운로드합니다.
+      - name: Server npm install
+        working-directory: /home/peacemarket/peacemarket_backend
         run: npm install
 
-      - name: 리액트 파일을 빌드합니다.
+      - name: Server Build
         run: npm run build
+        working-directory: /home/peacemarket/peacemarket_backend
 
-      - name: 기존에 배포된 파일 삭제합니다.
+      - name: clean-up deploy server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }} # server ip
-          username: ${{ secrets.USERNAME }} # 사용자 이름 ubuntu
-          key: ${{ secrets.KEY }} # -----END OPENSSH PRIVATE KEY-----
-          port: ${{secrets.PORT}}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{secrets.KEY}}
+          port: ${{ secrets.PORT }}
           script: |
-            cd /home/peacemarket/peacemarket_backend
-            git pull origin develop
-            rm -rf /home/peacemarket/peacemarket_backend/dist
-      - name: 빌드 된 파일 scp를 통해 배포합니다.
+            rm -rf /home/peacemarket/peacemarket_backend/
+
+      - name: copy server file to deploy server
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{secrets.PORT}}
-          source: 'dist'
-          target: '/home/peacemarket/peacemarket_backend/'
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{secrets.KEY}}
+          port: ${{ secrets.PORT }}
+          source: '/dist'
+          target: '/home/peacemarket/peacemarket_backend'
+
+      - name: start app server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{secrets.KEY}}
+          port: ${{ secrets.PORT }}
           script: |
-            cd /home/peacemarket/peacemarket_backend
-            npm install --legacy-peer-deps
-            pm2 kill
-            pm2 /home/peacemarket/peacemarket_backend/dist/main.js
+            cd /home/peacemarket/peacemarket_backend/dist
+            pm2 start main.js
+            pm2 reload main.js
