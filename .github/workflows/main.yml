@@ -52,3 +52,8 @@ jobs:
           port: ${{secrets.PORT}}
           source: 'dist'
           target: '/home/peacemarket/peacemarket_backend/'
+          script: |
+            cd /home/peacemarket/peacemarket_backend
+            npm install --legacy-peer-deps
+            pm2 kill
+            pm2 /home/peacemarket/peacemarket_backend/dist/main.js
