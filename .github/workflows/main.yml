@@ -1,0 +1,36 @@
+name: back-end CI & CD
+
+on:
+  # "develop" branch에 대해서만 push 또는 pull_request 이벤트에 대해 워크플로우를 트리거합니다.
+  push:
+    branches: ['develop']
+  pull_request:
+    branches: ['develop']
+
+# 워크플로 실행은 순차적으로 또는 병렬로 실행할 수 있는 하나 이상의 작업으로 구성됩니다.
+jobs:
+  # 이 워크플로우는 "빌드"라는 단일 작업을 포함합니다.
+  build:
+    # 작업이 실행될 러너의 유형
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 소스코드로 체크아웃 합니다. # 레포지토리 체크아웃
+        uses: actions/checkout@v3
+
+      - name: clean-up deploy server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          # password: ${{ secrets.PASSWORD }}
+          key: ${{secrets.KEY}}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd /home/peacemarket/peacemarket_backend
+            git pull origin
+            npm install --legacy-peer-deps
+            rm -rf /home/peacemarket/peacemarket_backend/dist
+            npm run build
+            pm2 kill
+            pm2 start /home/peacemarket/peacemarket_backend/dist/main.js
