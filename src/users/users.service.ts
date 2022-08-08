@@ -45,6 +45,9 @@ export class UsersService {
     const user = await this.usersRepository.findOne({ signupVerifyToken });
     if (!user) throw new NotFoundException('유저가 존재하지 않습니다.');
 
+    user.email_verify = true;
+    this.usersRepository.save(user);
+
     return this.authService.login({
       id: user.id,
       email: user.email,
@@ -55,6 +58,8 @@ export class UsersService {
   async login(loginRequestDto: LoginRequestDto) {
     const { email, password } = loginRequestDto;
     const user = await this.usersRepository.findOne({ email });
+    if (!user.email_verify)
+      throw new UnauthorizedException('이메일 인증을 받지 못했습니다.');
     if (user && (await bcrypt.compare(password, user.password))) {
       return this.authService.login({
         id: user.id,
