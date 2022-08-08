@@ -24,7 +24,7 @@ export class User extends BaseEntity {
 
   @ApiProperty({
     example: 'seastory624@gmail.com',
-    description: 'email',
+    description: '이메일',
     required: true,
   })
   @Column({ type: 'varchar', unique: true })
@@ -33,7 +33,7 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   email: string;
 
-  @ApiProperty({})
+  @ApiProperty({ example: 'Test123$', description: '비밀번호', required: true })
   @Column({ type: 'varchar' })
   @IsString()
   @IsNotEmpty()
@@ -41,20 +41,23 @@ export class User extends BaseEntity {
   @MaxLength(20)
   password: string;
 
-  @ApiProperty({})
+  @ApiProperty({ example: 'peaceman', description: '닉네임', required: true })
   @Column({ type: 'varchar', unique: true })
   @IsString()
   @IsNotEmpty()
   nickname: string;
 
-  @ApiProperty({})
+  @ApiProperty({
+    example: '010-7637-0624',
+    description: '전화번호',
+    required: true,
+  })
   @Column({ type: 'varchar', unique: true })
   @IsString()
   @IsNotEmpty()
   @IsMobilePhone('ko-KR')
   phoneNumber: string;
 
-  @ApiProperty({})
   @Column({
     default:
       'http://itimg.chosun.com/sitedata/image/202102/09/2021020902484_0.jpg',
@@ -63,23 +66,19 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   imgUrl: string;
 
-  @ApiProperty({})
   @Column({ type: 'uuid' })
   signupVerifyToken: string;
 
-  @ApiProperty({})
   @Column({ default: false })
   @IsString()
   @IsNotEmpty()
   email_verify: boolean;
 
-  @ApiProperty({})
   @CreateDateColumn()
   @IsDate()
   @IsNotEmpty()
   createdAt: Date;
 
-  @ApiProperty({})
   @Column()
   @IsNotEmpty()
   role: UserRole;

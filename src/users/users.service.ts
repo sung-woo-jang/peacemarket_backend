@@ -6,9 +6,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
 import { EmailService } from 'src/email/email.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto/request/create-user.dto';
 import { UsersRepository } from './users.repository';
-import { LoginRequestDto } from './dto/login-request.dto';
+import { LoginRequestDto } from './dto/request/login-request.dto';
 import * as bcrypt from 'bcryptjs';
 import * as uuid from 'uuid';
 

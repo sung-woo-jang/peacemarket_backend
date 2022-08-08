@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PayloadDto } from 'src/users/dto/payload.dto';
+import { PayloadDto } from 'src/users/dto/request/payload.dto';
 import * as jwt from 'jsonwebtoken';
 
 @Injectable()
