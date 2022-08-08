@@ -20,12 +20,12 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('평화마켓')
-    .setDescription('평화마켓  설명서')
+    .setDescription('평화마켓 API 설명서')
     .setVersion('1.0')
     .addTag('peacemarket')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('docs', app, document);
 
   await app.listen(5500);
 }
