@@ -27,12 +27,10 @@ jobs:
           key: ${{secrets.KEY}}
           port: ${{ secrets.PORT }}
           script: |
+            cd /home/peacemarket/
+            git clone https://github.com/sung-woo-jang/peacemarket_backend.git
             cd /home/peacemarket/peacemarket_backend
-            rm -rf /home/peacemarket/peacemarket_backend/package.json
-            rm -rf /home/peacemarket/peacemarket_backend/package-lock.json
-            git pull origin
             npm install --legacy-peer-deps
-            rm -rf /home/peacemarket/peacemarket_backend/dist
             npm run build
             pm2 kill
             pm2 start /home/peacemarket/peacemarket_backend/dist/main.js
