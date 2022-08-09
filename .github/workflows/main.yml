@@ -28,6 +28,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/peacemarket/peacemarket_backend
+            rm -rf /home/peacemarket/peacemarket_backend/package.json
+            rm -rf /home/peacemarket/peacemarket_backend/package-lock.json
             git pull origin
             npm install --legacy-peer-deps
             rm -rf /home/peacemarket/peacemarket_backend/dist
