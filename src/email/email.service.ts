@@ -1,6 +1,11 @@
 import { MailerService } from '@nestjs-modules/mailer';
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { EmailAuthDto } from './dto/emailAuth.dto';
+import { EmailCodeDto } from './dto/emailCode.dto';
 import { EmailRepository } from './email.repository';
 
 @Injectable()
@@ -50,5 +55,21 @@ export class EmailService {
         signupVerifyToken,
       );
     }
+  }
+
+  async confirmEmailAuthCode(emailCodeDto: EmailCodeDto) {
+    const user = await this.emailRepository.findOne({
+      email: emailCodeDto.email,
+    });
+
+    if (emailCodeDto.signupVerifyToken !== user.signupVerifyToken)
+      throw new UnauthorizedException('토큰값이 다릅니다.');
+
+    if (+new Date(user.expiresTime) - +new Date(Date.now()) < 0)
+      throw new UnauthorizedException('이미 만료된 토큰입니다.');
+
+    //인증이 완료되면 이메일 상태변경
+    user.status = true;
+    await user.save();
   }
 }
