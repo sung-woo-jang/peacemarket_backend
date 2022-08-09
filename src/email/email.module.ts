@@ -4,7 +4,7 @@ import { Module } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { EmailController } from './email.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmailAuth } from './entities/emailAuth.entity';
+import { EmailRepository } from './email.repository';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import { EmailAuth } from './entities/emailAuth.entity';
         },
       }),
     }),
-    TypeOrmModule.forFeature([EmailAuth]),
+    TypeOrmModule.forFeature([EmailRepository]),
   ],
   providers: [EmailService],
   exports: [EmailService],
