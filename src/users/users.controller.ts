@@ -30,14 +30,14 @@ export class UsersController {
     return this.usersService.signUp(createUserDto);
   }
 
-  @ApiOperation({ summary: '이메일 인증 API' })
+  /*   @ApiOperation({ summary: '이메일 인증 API' })
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 404, description: '실패' })
   @Post('email-verify')
   async verifyEmail(@Query() dto: VerifyEmailDto) {
     const { signupVerifyToken } = dto;
     return this.usersService.verifyEmail(signupVerifyToken);
-  }
+  } */
 
   @ApiOperation({ summary: '로그인 API' })
   @ApiResponse({ status: 201, description: '성공' })

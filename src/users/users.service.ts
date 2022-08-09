@@ -21,7 +21,10 @@ export class UsersService {
   ) {}
 
   async signUp(createUserDto: CreateUserDto) {
-    const signupVerifyToken = String(Math.random().toString(36).slice(2));
+    const user = await this.emailService.emailExists(createUserDto.email);
+
+    if (!user || !user.status)
+      throw new UnauthorizedException(`이메일 인증이 되지 않은 계정입니다.`);
 
     await this.usersRepository.checkUserExists(
       createUserDto.email,
@@ -29,18 +32,18 @@ export class UsersService {
       createUserDto.phoneNumber,
     );
 
-    await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
-    return await this.usersRepository.signUp(createUserDto, signupVerifyToken);
+    // await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
+    return await this.usersRepository.signUp(createUserDto);
   }
 
-  private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
+  /* private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
     await this.emailService.sendMemberJoinVerification(
       email,
       signupVerifyToken,
     );
-  }
+  } */
 
-  async verifyEmail(signupVerifyToken: string): Promise<string> {
+  /* async verifyEmail(signupVerifyToken: string): Promise<string> {
     const user = await this.usersRepository.findOne({ signupVerifyToken });
     if (!user) throw new NotFoundException('유저가 존재하지 않습니다.');
 
@@ -52,13 +55,13 @@ export class UsersService {
       email: user.email,
       nickname: user.nickname,
     });
-  }
+  } */
 
   async login(loginRequestDto: LoginRequestDto) {
     const { email, password } = loginRequestDto;
     const user = await this.usersRepository.findOne({ email });
-    if (!user.email_verify)
-      throw new UnauthorizedException('이메일 인증을 받지 못했습니다.');
+    // if (!user.email_verify)
+    // throw new UnauthorizedException('이메일 인증을 받지 못했습니다.');
     if (user && (await bcrypt.compare(password, user.password))) {
       return this.authService.login({
         id: user.id,

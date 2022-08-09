@@ -66,13 +66,13 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   imgUrl: string;
 
-  @Column({ type: 'uuid' })
-  signupVerifyToken: string;
+  // @Column({ type: 'uuid' })
+  // signupVerifyToken: string;
 
-  @Column({ default: false })
-  @IsString()
-  @IsNotEmpty()
-  email_verify: boolean;
+  // @Column({ default: false })
+  // @IsString()
+  // @IsNotEmpty()
+  // email_verify: boolean;
 
   @CreateDateColumn()
   @IsDate()

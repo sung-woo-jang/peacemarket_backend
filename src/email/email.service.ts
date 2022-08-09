@@ -29,9 +29,7 @@ export class EmailService {
 
   async sendAuthCodeToEmail(emailAuthDto: EmailAuthDto) {
     const signupVerifyToken = String(Math.random().toString(36).slice(2));
-    const user = await this.emailRepository.findOne({
-      email: emailAuthDto.email,
-    });
+    const user = await this.emailExists(emailAuthDto.email);
 
     if (user.status)
       throw new ConflictException(
@@ -45,7 +43,7 @@ export class EmailService {
     );
     if (user !== undefined) {
       user.signupVerifyToken = signupVerifyToken;
-      user.expiresTime = new Date(Date.now() + 3 * 60 * 1000);
+      user.expiresTime = new Date(Date.now() + 1 * 60 * 1000);
       user.save();
       return { expiresTime: user.expiresTime };
     } else {
@@ -58,9 +56,7 @@ export class EmailService {
   }
 
   async confirmEmailAuthCode(emailCodeDto: EmailCodeDto) {
-    const user = await this.emailRepository.findOne({
-      email: emailCodeDto.email,
-    });
+    const user = await this.emailExists(emailCodeDto.email);
 
     if (emailCodeDto.signupVerifyToken !== user.signupVerifyToken)
       throw new UnauthorizedException('토큰값이 다릅니다.');
@@ -71,5 +67,11 @@ export class EmailService {
     //인증이 완료되면 이메일 상태변경
     user.status = true;
     await user.save();
+  }
+
+  async emailExists(email: string) {
+    return await this.emailRepository.findOne({
+      email,
+    });
   }
 }

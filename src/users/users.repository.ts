@@ -7,7 +7,7 @@ import { ConflictException } from '@nestjs/common';
 
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
-  async signUp(createUserDto: CreateUserDto, signupVerifyToken: string) {
+  async signUp(createUserDto: CreateUserDto) {
     const { email, password, nickname, phoneNumber } = createUserDto;
 
     const salt = await bcrypt.genSalt(10);
@@ -17,7 +17,6 @@ export class UsersRepository extends Repository<User> {
       email,
       password: hashedPassword,
       nickname,
-      signupVerifyToken,
       phoneNumber,
       role: UserRole.USER,
     }).save();
@@ -26,7 +25,9 @@ export class UsersRepository extends Repository<User> {
 
   async checkUserExists(email: string, nickname: string, phoneNumber: string) {
     if (await this.findOne({ email }))
-      throw new ConflictException('해당 이메일로는 가입할 수 없습니다.');
+      throw new ConflictException(
+        `이미 가입한 이메일입니다. '이메일 로그인'으로 로그인해주세요.`,
+      );
 
     if (await this.findOne({ nickname }))
       throw new ConflictException('해당 닉네임은 사용할 수 없습니다.');
