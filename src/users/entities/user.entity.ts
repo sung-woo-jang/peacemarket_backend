@@ -19,6 +19,10 @@ import { UserRole } from './user.role.enum';
 
 @Entity()
 export class User extends BaseEntity {
+  @ApiProperty({
+    description: 'id - 자동생성',
+    required: true,
+  })
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
