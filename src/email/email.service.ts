@@ -10,10 +10,14 @@ export class EmailService {
     const mailOptions = {
       to: email, // list of receivers
       subject: '평화마켓 회원가입 인증 메일입니다. ✔', // Subject line
-      html: ` 가입확인 버튼를 누르시면 가입 인증이 완료됩니다.<br/>
-        <form action=${URL} method="POST">
-          <button>가입확인</button>
-        </form>`, // HTML body content
+      html: `
+<div style="font-size: 18px; font-weight: 700; margin-bottom: 10px; margin-top: 60px;">
+인증코드를 확인해주세요.
+    </div>
+    <span style="font-size: 32px; line-height: 42px; font-weight: 700; display: block; margin-top: 6px;">
+194706 
+    </span>
+`, // HTML body content
     };
 
     return await this.mailerService.sendMail(mailOptions);

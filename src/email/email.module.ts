@@ -2,6 +2,9 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { Module } from '@nestjs/common';
 import { EmailService } from './email.service';
+import { EmailController } from './email.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EmailAuth } from './entities/emailAuth.entity';
 
 @Module({
   imports: [
@@ -28,8 +31,10 @@ import { EmailService } from './email.service';
         },
       }),
     }),
+    TypeOrmModule.forFeature([EmailAuth]),
   ],
   providers: [EmailService],
   exports: [EmailService],
+  controllers: [EmailController],
 })
 export class EmailModule {}

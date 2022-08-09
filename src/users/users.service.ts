@@ -10,7 +10,6 @@ import { CreateUserDto } from './dto/request/create-user.dto';
 import { UsersRepository } from './users.repository';
 import { LoginRequestDto } from './dto/request/login-request.dto';
 import * as bcrypt from 'bcryptjs';
-import * as uuid from 'uuid';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +21,7 @@ export class UsersService {
   ) {}
 
   async signUp(createUserDto: CreateUserDto) {
-    const signupVerifyToken = uuid.v1();
+    const signupVerifyToken = String(Math.random().toString(36).slice(2));
 
     await this.usersRepository.checkUserExists(
       createUserDto.email,
