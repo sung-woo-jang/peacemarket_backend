@@ -26,8 +26,8 @@ export class UsersService {
     if (!user || !user.status)
       throw new UnauthorizedException(`이메일 인증이 되지 않은 계정입니다.`);
 
-    await this.usersRepository.checkUserExists(
-      createUserDto.email,
+    await this.usersRepository.checkUserExistsByEmail(createUserDto.email);
+    await this.usersRepository.checkUserExistsByNickname(
       createUserDto.nickname,
     );
 
