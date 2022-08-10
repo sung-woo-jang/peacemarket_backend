@@ -2,7 +2,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDate,
   IsEmail,
-  IsMobilePhone,
   IsNotEmpty,
   IsString,
   MaxLength,
@@ -51,17 +50,6 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   nickname: string;
 
-  @ApiProperty({
-    example: '010-7637-0624',
-    description: '전화번호',
-    required: true,
-  })
-  @Column({ type: 'varchar', unique: true })
-  @IsString()
-  @IsNotEmpty()
-  @IsMobilePhone('ko-KR')
-  phoneNumber: string;
-
   @Column({
     default:
       'http://itimg.chosun.com/sitedata/image/202102/09/2021020902484_0.jpg',
@@ -69,14 +57,6 @@ export class User extends BaseEntity {
   @IsString()
   @IsNotEmpty()
   imgUrl: string;
-
-  // @Column({ type: 'uuid' })
-  // signupVerifyToken: string;
-
-  // @Column({ default: false })
-  // @IsString()
-  // @IsNotEmpty()
-  // email_verify: boolean;
 
   @CreateDateColumn()
   @IsDate()

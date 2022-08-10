@@ -29,33 +29,10 @@ export class UsersService {
     await this.usersRepository.checkUserExists(
       createUserDto.email,
       createUserDto.nickname,
-      createUserDto.phoneNumber,
     );
 
-    // await this.sendMemberJoinEmail(createUserDto.email, signupVerifyToken);
     return await this.usersRepository.signUp(createUserDto);
   }
-
-  /* private async sendMemberJoinEmail(email: string, signupVerifyToken: string) {
-    await this.emailService.sendMemberJoinVerification(
-      email,
-      signupVerifyToken,
-    );
-  } */
-
-  /* async verifyEmail(signupVerifyToken: string): Promise<string> {
-    const user = await this.usersRepository.findOne({ signupVerifyToken });
-    if (!user) throw new NotFoundException('유저가 존재하지 않습니다.');
-
-    user.email_verify = true;
-    this.usersRepository.save(user);
-
-    return this.authService.login({
-      id: user.id,
-      email: user.email,
-      nickname: user.nickname,
-    });
-  } */
 
   async login(loginRequestDto: LoginRequestDto) {
     const { email, password } = loginRequestDto;

@@ -1,15 +1,6 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Query,
-  Get,
-  Param,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
-import { VerifyEmailDto } from './dto/request/verify-email.dto';
 import { LoginRequestDto } from './dto/request/login-request.dto';
 import { AuthGuard } from 'src/guard/auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -29,15 +20,6 @@ export class UsersController {
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.usersService.signUp(createUserDto);
   }
-
-  /*   @ApiOperation({ summary: '이메일 인증 API' })
-  @ApiResponse({ status: 201, description: '성공' })
-  @ApiResponse({ status: 404, description: '실패' })
-  @Post('email-verify')
-  async verifyEmail(@Query() dto: VerifyEmailDto) {
-    const { signupVerifyToken } = dto;
-    return this.usersService.verifyEmail(signupVerifyToken);
-  } */
 
   @ApiOperation({ summary: '로그인 API' })
   @ApiResponse({ status: 201, description: '성공' })

@@ -27,6 +27,7 @@ jobs:
           key: ${{secrets.KEY}}
           port: ${{ secrets.PORT }}
           script: |
+            rm -rf /home/peacemarket/eacemarket_backend
             cd /home/peacemarket/
             git clone https://github.com/sung-woo-jang/peacemarket_backend.git
             cd /home/peacemarket/peacemarket_backend
