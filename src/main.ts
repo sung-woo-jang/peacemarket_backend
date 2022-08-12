@@ -1,12 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as expressBasicAuth from 'express-basic-auth';
 import { AppModule } from './app.module';
+import * as expressBasicAuth from 'express-basic-auth';
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('/api');
+  app.use(cookieParser());
   app.enableCors({ credentials: true, origin: true });
   app.useGlobalPipes(new ValidationPipe({ transform: true })); // class-transformer가 적용되기 위한 옵션
 

@@ -1,30 +1,28 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PayloadDto } from 'src/users/dto/request/payload.dto';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UsersRepository } from 'src/users/users.repository';
+import * as bcrypt from 'bcryptjs';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
-  async login(payload: PayloadDto) {
-    return jwt.sign(payload, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPRIESIN,
-    });
+  constructor(
+    @InjectRepository(UsersRepository) private usersRepository: UsersRepository,
+    private jwtService: JwtService,
+  ) {}
+
+  async validateUser(email: string, password: string): Promise<any> {
+    const user = await this.usersRepository.findOne({ email });
+    if (user && (await bcrypt.compare(password, user.password))) {
+      delete user.password;
+      return user;
+    } else throw new UnauthorizedException('로그인 실패');
   }
 
-  verify(jwtString: string) {
-    try {
-      const payload = jwt.verify(
-        jwtString,
-        process.env.JWT_SECRET,
-      ) as jwt.JwtPayload;
-
-      const { id, email } = payload;
-
-      return {
-        userId: id,
-        email,
-      };
-    } catch (e) {
-      throw new UnauthorizedException();
-    }
+  async login(user: User) {
+    const payload = { nickname: user.nickname, sub: user.id };
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 }

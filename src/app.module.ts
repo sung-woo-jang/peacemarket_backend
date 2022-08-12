@@ -6,6 +6,8 @@ import { EmailModule } from './email/email.module';
 import { UsersModule } from './users/users.module';
 import { ExceptionModule } from './exception/exception.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
+import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -29,5 +31,6 @@ import { InterceptorModule } from './interceptor/interceptor.module';
     ExceptionModule,
     InterceptorModule,
   ],
+  providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
 export class AppModule {}

@@ -22,12 +22,14 @@ export class UsersRepository extends Repository<User> {
     return user;
   }
 
-  async checkUserExists(email: string, nickname: string) {
+  async checkUserExistsByEmail(email: string) {
     if (await this.findOne({ email }))
       throw new ConflictException(
         `이미 가입한 이메일입니다. '이메일 로그인'으로 로그인해주세요.`,
       );
+  }
 
+  async checkUserExistsByNickname(nickname: string) {
     if (await this.findOne({ nickname }))
       throw new ConflictException('해당 닉네임은 사용할 수 없습니다.');
   }
