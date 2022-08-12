@@ -1,14 +1,25 @@
-import { Controller, Post, Body, Get, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Request,
+  Get,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
-import { LoginRequestDto } from './dto/request/login-request.dto';
-import { AuthGuard } from 'src/guard/auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
+import { AuthService } from 'src/auth/auth.service';
+import { Public } from 'src/decorator/skip-auth.decorator';
 
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private authService: AuthService,
+  ) {}
 
   @ApiOperation({
     summary: '회원가입 API',
@@ -16,6 +27,7 @@ export class UsersController {
   })
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 409, description: '실패' })
+  @Public()
   @Post()
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.usersService.signUp(createUserDto);
@@ -24,14 +36,15 @@ export class UsersController {
   @ApiOperation({ summary: '로그인 API' })
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 401, description: '실패' })
+  @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('/login')
-  async login(@Body() dto: LoginRequestDto) {
-    return await this.usersService.login(dto);
+  async login(@Request() req) {
+    return this.authService.login(req.user);
   }
 
-  @Get(':id')
-  @UseGuards(AuthGuard)
-  async getUserInfo(@Param('id') userId: string) {
-    return this.usersService.getUserInfo(userId);
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
