@@ -29,18 +29,4 @@ export class UsersService {
 
     return await this.usersRepository.signUp(createUserDto);
   }
-
-  async getUserInfo(userId: string) {
-    const user = await this.usersRepository.findOne({ id: userId });
-
-    if (!user) {
-      throw new NotFoundException('유저가 존재하지 않습니다');
-    }
-
-    return {
-      id: user.id,
-      nickname: user.nickname,
-      email: user.email,
-    };
-  }
 }

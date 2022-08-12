@@ -3,8 +3,9 @@ import {
   Post,
   Body,
   UseGuards,
-  Request,
   Get,
+  Req,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/request/create-user.dto';
@@ -12,6 +13,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
 import { AuthService } from 'src/auth/auth.service';
 import { Public } from 'src/decorator/skip-auth.decorator';
+import { Request, Response } from 'express';
 
 @ApiTags('users')
 @Controller('users')
@@ -39,12 +41,16 @@ export class UsersController {
   @UseGuards(LocalAuthGuard)
   @Public()
   @Post('/login')
-  async login(@Request() req) {
-    return this.authService.login(req.user);
+  async login(@Req() req, @Res({ passthrough: true }) res: Response) {
+    const token = await this.authService.login(req.user);
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: +process.env.JWT_EXPRIESIN,
+    });
   }
 
   @Get('profile')
-  getProfile(@Request() req) {
+  getProfile(@Req() req: Request) {
     return req.user;
   }
 }
