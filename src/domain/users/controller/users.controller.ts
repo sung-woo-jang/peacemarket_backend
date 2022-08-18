@@ -7,13 +7,13 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/request/create-user.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { LocalAuthGuard } from 'src/auth/guard/local-auth.guard';
-import { AuthService } from 'src/auth/auth.service';
+import { LocalAuthGuard } from 'src/domain/auth/guard/local-auth.guard';
 import { Public } from 'src/decorator/skip-auth.decorator';
 import { Request, Response } from 'express';
+import { AuthService } from 'src/domain/auth/service/auth.service';
+import { CreateUserDto } from '../dto/request/create-user.dto';
+import { UsersService } from '../service/users.service';
 
 @ApiTags('users')
 @Controller('users')

@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from './auth/auth.module';
-import { EmailModule } from './email/email.module';
-import { UsersModule } from './users/users.module';
+import { AuthModule } from './domain/auth/auth.module';
+import { UsersModule } from './domain/users/users.module';
 import { ExceptionModule } from './exception/exception.module';
 import { InterceptorModule } from './interceptor/interceptor.module';
-import { JwtAuthGuard } from './auth/guard/jwt-auth.guard';
+import { JwtAuthGuard } from './domain/auth/guard/jwt-auth.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { EmailModule } from './domain/email/email.module';
 
 @Module({
   imports: [

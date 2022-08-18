@@ -1,12 +1,8 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { EmailService } from 'src/email/email.service';
-import { CreateUserDto } from './dto/request/create-user.dto';
-import { UsersRepository } from './users.repository';
+import { EmailService } from 'src/domain/email/service/email.service';
+import { CreateUserDto } from '../dto/request/create-user.dto';
+import { UsersRepository } from '../repository/users.repository';
 
 @Injectable()
 export class UsersService {

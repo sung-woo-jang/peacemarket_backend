@@ -1,6 +1,6 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { EmailAuthDto } from './dto/emailAuth.dto';
-import { Email } from './entities/emailAuth.entity';
+import { EmailAuthDto } from '../dto/emailAuth.dto';
+import { Email } from '../entities/emailAuth.entity';
 
 @EntityRepository(Email)
 export class EmailRepository extends Repository<Email> {

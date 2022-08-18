@@ -4,9 +4,9 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { EmailAuthDto } from './dto/emailAuth.dto';
-import { EmailCodeDto } from './dto/emailCode.dto';
-import { EmailRepository } from './email.repository';
+import { EmailAuthDto } from '../dto/emailAuth.dto';
+import { EmailCodeDto } from '../dto/emailCode.dto';
+import { EmailRepository } from '../repository/email.repository';
 
 @Injectable()
 export class EmailService {

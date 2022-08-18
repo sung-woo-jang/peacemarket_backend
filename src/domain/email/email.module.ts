@@ -1,10 +1,11 @@
 import { MailerModule } from '@nestjs-modules/mailer';
 import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { Module } from '@nestjs/common';
-import { EmailService } from './email.service';
-import { EmailController } from './email.controller';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EmailRepository } from './email.repository';
+import { EmailController } from './controller/email.controller';
+import { EmailRepository } from './repository/email.repository';
+import { EmailService } from './service/email.service';
 
 @Module({
   imports: [
