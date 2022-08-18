@@ -19,7 +19,7 @@ export class UsersService {
   async signUp(createUserDto: CreateUserDto) {
     const user = await this.emailService.emailExists(createUserDto.email);
 
-    if (!user || !user.status)
+    if (user && user.status)
       throw new UnauthorizedException(`이메일 인증이 되지 않은 계정입니다.`);
 
     await this.usersRepository.checkUserExistsByEmail(createUserDto.email);

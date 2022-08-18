@@ -31,7 +31,7 @@ export class EmailService {
     const signupVerifyToken = String(Math.random().toString(36).slice(2));
     const user = await this.emailExists(emailAuthDto.email);
 
-    if (user.status)
+    if (user && user.status)
       throw new ConflictException(
         `이미 가입한 이메일입니다. '이메일 로그인'으로 로그인해주세요.`,
       );
@@ -43,7 +43,7 @@ export class EmailService {
     );
     if (user !== undefined) {
       user.signupVerifyToken = signupVerifyToken;
-      user.expiresTime = new Date(Date.now() + 1 * 60 * 1000);
+      user.expiresTime = new Date(Date.now() + 3 * 60 * 1000);
       user.save();
       return { expiresTime: user.expiresTime };
     } else {

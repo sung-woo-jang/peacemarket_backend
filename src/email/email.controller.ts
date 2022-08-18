@@ -1,5 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Public } from 'src/decorator/skip-auth.decorator';
 import { EmailAuthDto } from './dto/emailAuth.dto';
 import { EmailCodeDto } from './dto/emailCode.dto';
 import { EmailService } from './email.service';
@@ -15,6 +16,7 @@ export class EmailController {
   })
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 409, description: '실패' })
+  @Public()
   @Post('/send')
   sendEmailAuthCode(@Body() emailAuthDto: EmailAuthDto) {
     return this.emailService.sendAuthCodeToEmail(emailAuthDto);
@@ -26,6 +28,7 @@ export class EmailController {
   })
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 409, description: '실패' })
+  @Public()
   @Post('confirm')
   confirmEmailAuthCode(@Body() emailCodeDto: EmailCodeDto) {
     return this.emailService.confirmEmailAuthCode(emailCodeDto);
