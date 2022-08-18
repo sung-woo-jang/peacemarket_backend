@@ -11,13 +11,13 @@ export class EmailController {
   constructor(private emailService: EmailService) {}
 
   @ApiOperation({
-    summary: '이메일 인증 전송',
-    description: '이메일 인증 번호를 전송합니다.',
+    summary: '인증 메일 전송',
+    description: 'body의 이메일담긴 email로 인증 메일을 보냄',
   })
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 409, description: '실패' })
   @Public()
-  @Post('/send')
+  @Post('/verify_send')
   sendEmailAuthCode(@Body() emailAuthDto: EmailAuthDto) {
     return this.emailService.sendAuthCodeToEmail(emailAuthDto);
   }
@@ -29,7 +29,7 @@ export class EmailController {
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 409, description: '실패' })
   @Public()
-  @Post('confirm')
+  @Post('/verify_confirm')
   confirmEmailAuthCode(@Body() emailCodeDto: EmailCodeDto) {
     return this.emailService.confirmEmailAuthCode(emailCodeDto);
   }

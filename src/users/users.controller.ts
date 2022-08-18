@@ -30,7 +30,7 @@ export class UsersController {
   @ApiResponse({ status: 201, description: '성공' })
   @ApiResponse({ status: 409, description: '실패' })
   @Public()
-  @Post()
+  @Post('/signup')
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.usersService.signUp(createUserDto);
   }
