@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/domain/users/entities/user.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductsRepository } from '../repository/products.repository';
 
@@ -7,11 +8,11 @@ import { ProductsRepository } from '../repository/products.repository';
 export class ProductsService {
   constructor(
     @InjectRepository(ProductsRepository)
-    productsRepository: ProductsRepository,
+    private productsRepository: ProductsRepository,
   ) {}
 
-  async registProduct(createProductDto: CreateProductDto) {
-    return '';
+  async registProduct(user: User, createProductDto: CreateProductDto) {
+    return await this.productsRepository.registProduct(user, createProductDto);
   }
 
   async getProduct() {
