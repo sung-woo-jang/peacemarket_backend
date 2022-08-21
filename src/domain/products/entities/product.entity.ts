@@ -33,7 +33,7 @@ export class Product extends BaseEntity {
   price: number;
 
   // 판매여부
-  @Column()
+  @Column({ default: true })
   status: boolean;
 
   // 등록시간
