@@ -50,6 +50,12 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   nickname: string;
 
+  @ApiProperty({
+    example:
+      'http://itimg.chosun.com/sitedata/image/202102/09/2021020902484_0.jpg',
+    description: '프로필 사진',
+    required: true,
+  })
   @Column({
     default:
       'http://itimg.chosun.com/sitedata/image/202102/09/2021020902484_0.jpg',
@@ -58,11 +64,21 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   imgUrl: string;
 
+  @ApiProperty({
+    example: '2022-08-18T17:14:45.865Z',
+    description: '계정 생성일',
+    required: true,
+  })
   @CreateDateColumn()
   @IsDate()
   @IsNotEmpty()
   createdAt: Date;
 
+  @ApiProperty({
+    enum: ['ADMIN', 'USER'],
+    description: '사용자 권한',
+    required: true,
+  })
   @Column()
   @IsNotEmpty()
   role: UserRole;

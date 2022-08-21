@@ -7,13 +7,20 @@ import {
   Req,
   Res,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { LocalAuthGuard } from 'src/domain/auth/guard/local-auth.guard';
 import { Public } from 'src/decorator/skip-auth.decorator';
 import { Request, Response } from 'express';
 import { AuthService } from 'src/domain/auth/service/auth.service';
 import { CreateUserDto } from '../dto/request/create-user.dto';
 import { UsersService } from '../service/users.service';
+import { UsersAPIDocs } from '../docs/users.docs';
 
 @ApiTags('users')
 @Controller('users')
@@ -23,12 +30,9 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  @ApiOperation({
-    summary: '회원가입 API',
-    description: 'peacemarket에 회원가입을 합니다.',
-  })
-  @ApiResponse({ status: 201, description: '성공' })
-  @ApiResponse({ status: 409, description: '실패' })
+  @ApiOperation(UsersAPIDocs.signUpOperation())
+  @ApiCreatedResponse({ description: '성공' })
+  @ApiUnauthorizedResponse({ description: '실패' })
   @Public()
   @Post('/signup')
   signUp(@Body() createUserDto: CreateUserDto) {
