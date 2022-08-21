@@ -15,11 +15,31 @@ export class ProductsService {
     return await this.productsRepository.registProduct(user, createProductDto);
   }
 
-  async getProduct() {
-    return '';
+  async getAllProducts() {
+    return await this.productsRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.user', 'user')
+      // .select([
+      //   'product.product_id',
+      //   'product.title',
+      //   'product.description',
+      //   'product.price',
+      //   'product.status',
+      //   'product.createdAt',
+      //   'product.category',
+      //   'product.userId',
+      //   'user.id',
+      //   'user.email',
+      //   'user.password',
+      //   'user.nickname',
+      //   'user.imgUrl',
+      //   'user.createdAt',
+      //   'user.role',
+      // ])
+      .getRawMany();
   }
 
-  async getAllProducts() {
+  async getProduct() {
     return '';
   }
 

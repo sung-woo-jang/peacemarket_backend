@@ -18,7 +18,7 @@ export class Product extends BaseEntity {
     required: true,
   })
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  product_id: string;
 
   // 제목
   @Column()
