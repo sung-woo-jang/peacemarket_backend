@@ -8,7 +8,11 @@ import {
   Res,
 } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
+  ApiConflictResponse,
+  ApiCookieAuth,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
   ApiOperation,
   ApiResponse,
   ApiTags,
@@ -31,17 +35,17 @@ export class UsersController {
   ) {}
 
   @ApiOperation(UsersAPIDocs.signUpOperation())
-  @ApiCreatedResponse({ description: '성공' })
-  @ApiUnauthorizedResponse({ description: '실패' })
+  @ApiCreatedResponse(UsersAPIDocs.signUpCreatedResponse())
+  @ApiBadRequestResponse(UsersAPIDocs.signUpBadRequestResponse())
+  @ApiConflictResponse(UsersAPIDocs.signUpConflictResponse())
   @Public()
   @Post('/signup')
   signUp(@Body() createUserDto: CreateUserDto) {
     return this.usersService.signUp(createUserDto);
   }
 
-  @ApiOperation({ summary: '로그인 API' })
-  @ApiResponse({ status: 201, description: '성공' })
-  @ApiResponse({ status: 401, description: '실패' })
+  @ApiOperation(UsersAPIDocs.loginOperation())
+  @ApiUnauthorizedResponse(UsersAPIDocs.loginUnauthorizedResponse())
   @UseGuards(LocalAuthGuard)
   @Public()
   @Post('/login')
