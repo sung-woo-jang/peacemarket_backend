@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Delete,
-  Req,
   Param,
 } from '@nestjs/common';
 import { GetUser } from 'src/decorator/get-user.decorator';
