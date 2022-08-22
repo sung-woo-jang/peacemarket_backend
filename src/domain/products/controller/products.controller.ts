@@ -4,9 +4,12 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   Delete,
+  Req,
+  Param,
 } from '@nestjs/common';
+import { GetUser } from 'src/decorator/get-user.decorator';
+import { User } from 'src/domain/users/entities/user.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductsService } from '../service/products.service';
 
@@ -16,19 +19,23 @@ export class ProductsController {
 
   // 상품 등록
   @Post('/regist')
-  registProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.registProduct(createProductDto);
+  registProduct(
+    @GetUser() user: User,
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    return this.productsService.registProduct(user, createProductDto);
   }
 
-  // 상품상세 페이지
-  @Get('/:id')
-  getProduct() {
-    return this.productsService.getProduct();
-  }
   // 상품목록
   @Get('/')
   getAllProducts() {
     return this.productsService.getAllProducts();
+  }
+
+  // 상품상세 페이지
+  @Get('/:product_id')
+  getProduct(@Param('product_id') product_id: string) {
+    return this.productsService.getProduct(product_id);
   }
 
   // 상품정보 수정

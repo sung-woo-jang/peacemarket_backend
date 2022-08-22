@@ -7,11 +7,13 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { Product } from 'src/domain/products/entities/product.entity';
 import {
   BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRole } from './user.role.enum';
@@ -82,4 +84,7 @@ export class User extends BaseEntity {
   @Column()
   @IsNotEmpty()
   role: UserRole;
+
+  @OneToMany(() => Product, (product) => product.user)
+  product: Product[];
 }
