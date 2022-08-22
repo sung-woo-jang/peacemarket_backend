@@ -39,8 +39,12 @@ export class ProductsService {
       .getRawMany();
   }
 
-  async getProduct() {
-    return '';
+  async getProduct(product_id: string) {
+    return await this.productsRepository
+      .createQueryBuilder('product')
+      .leftJoinAndSelect('product.user', 'user')
+      .where({ product_id })
+      .getRawOne();
   }
 
   async updateProduct() {
