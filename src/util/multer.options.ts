@@ -13,8 +13,13 @@ export const registProductMulterOption = {
       cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
-      file.originalname = Date.now() + '.' + file.mimetype.split('/')[1];
-      cb(null, file.originalname);
+      // file.originalname = Date.now() + '.' + file.mimetype.split('/')[1];
+      const ext = path.extname(file.originalname);
+      const fileName = `${path.basename(
+        file.originalname,
+        ext,
+      )}${Date.now()}${ext}`;
+      cb(null, fileName);
     },
   }),
 };

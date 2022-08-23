@@ -6,23 +6,32 @@ import {
   Patch,
   Delete,
   Param,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/decorator/get-user.decorator';
 import { User } from 'src/domain/users/entities/user.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductsService } from '../service/products.service';
+import { registProductMulterOption } from 'src/util/multer.options';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
-
   // 상품 등록
   @Post('/regist')
-  registProduct(
+  @UseInterceptors(FilesInterceptor('images', 8, registProductMulterOption))
+  async registProduct(
     @GetUser() user: User,
     @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() files: Array<Express.Multer.File>,
   ) {
-    return this.productsService.registProduct(user, createProductDto);
+    return await this.productsService.registProduct(
+      user,
+      createProductDto,
+      files,
+    );
   }
 
   // 상품목록
