@@ -10,6 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProductCategory } from './category.enum';
+import { Image } from './image.entity';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -50,5 +51,7 @@ export class Product extends BaseEntity {
   @ManyToOne(() => User, (user) => user.product)
   user: User;
 
-  // 댓글
+  // 사진 경로
+  @ManyToOne(() => Image, (image) => image.product)
+  image: Image;
 }
