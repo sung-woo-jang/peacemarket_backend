@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProductCategory } from './category.enum';
@@ -52,6 +53,6 @@ export class Product extends BaseEntity {
   user: User;
 
   // 사진 경로
-  @ManyToOne(() => Image, (image) => image.product)
-  image: Image;
+  @OneToMany(() => Image, (images) => images.product)
+  images: Image[];
 }
