@@ -23,36 +23,68 @@ export class Product extends BaseEntity {
   product_id: string;
 
   // 제목
+  @ApiProperty({
+    example: '벽돌 팝니다',
+    description: '게시글 제목',
+    required: true,
+  })
   @Column()
   title: string;
 
   // 내용
+  @ApiProperty({
+    example: '벽돌 싸게 팝니다. 네고 사절 쿨 거래시 착불로 보내드립니다.',
+    description: '게시글 설명란',
+    required: true,
+  })
   @Column()
   description: string;
 
   // 가격
+  @ApiProperty({
+    example: 50000,
+    description: '상품 가격',
+    required: true,
+  })
   @Column({ type: 'int' })
   price: number;
 
   // 판매여부
+  @ApiProperty({
+    example: true,
+    description: '상품 판매 여부',
+    required: true,
+  })
   @Column({ default: true })
   status: boolean;
 
   // 등록시간
+  @ApiProperty({
+    example: '2022-08-18T17:14:45.865Z',
+    description: '게시글',
+    required: true,
+  })
   @CreateDateColumn()
   @IsDate()
   @IsNotEmpty()
   createdAt: Date;
 
   // 카테고리
-  @Column()
+  @ApiProperty({
+    enum: ProductCategory,
+    description: '카테고리 - 한글 그대로 보내주면 됩니다.',
+    required: true,
+  })
+  @Column({ type: 'enum', enum: ProductCategory })
   category: ProductCategory;
 
   // 판매자
+  @ApiProperty({ type: () => User })
   @ManyToOne(() => User, (user) => user.product)
   user: User;
 
   // 사진 경로
+  @ApiProperty({ type: () => Image })
   @OneToMany(() => Image, (images) => images.product)
   images: Image[];
 }

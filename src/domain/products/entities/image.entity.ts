@@ -32,6 +32,7 @@ export class Image extends BaseEntity {
   createdAt: Date;
 
   // 판매자
+  @ApiProperty({ type: () => Product })
   @ManyToOne(() => Product, (product) => product.images)
   product: Product;
 }

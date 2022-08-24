@@ -17,7 +17,7 @@ export class AuthService {
     if (user && (await bcrypt.compare(password, user.password))) {
       delete user.password;
       return user;
-    } else throw new UnauthorizedException('로그인 실패');
+    } else throw new UnauthorizedException('비밀번호가 틀립니다.');
   }
 
   async login(user: User) {

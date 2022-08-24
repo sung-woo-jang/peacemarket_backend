@@ -7,6 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { AuthService } from './service/auth.service';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthService } from './service/auth.service';
         signOptions: { expiresIn: +process.env.JWT_EXPRIESIN },
       }),
     }),
+    EmailModule,
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   exports: [AuthService],

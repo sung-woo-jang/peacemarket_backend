@@ -77,7 +77,7 @@ export class User extends BaseEntity {
   createdAt: Date;
 
   @ApiProperty({
-    enum: ['ADMIN', 'USER'],
+    enum: UserRole,
     description: '사용자 권한',
     required: true,
   })
@@ -85,6 +85,7 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   role: UserRole;
 
+  @ApiProperty({ type: () => Product })
   @OneToMany(() => Product, (product) => product.user)
   product: Product[];
 }
