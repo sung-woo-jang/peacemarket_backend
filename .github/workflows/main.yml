@@ -28,7 +28,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /home/peacemarket/peacemarket_backend
-            git pull origin master
+            git pull origin
             npm install --legacy-peer-deps
             npm run prebuild
             npm run build
