@@ -16,7 +16,15 @@ import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductsService } from '../service/products.service';
 import { registProductMulterOption } from 'src/util/multer.options';
 import { ProductsAPIDocs } from '../docs/products.docs';
-import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
+import {
+  ApiCookieAuth,
+  ApiCreatedResponse,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+import { Public } from 'src/decorator/skip-auth.decorator';
 
 @Controller('products')
 export class ProductsController {
@@ -39,12 +47,19 @@ export class ProductsController {
   }
 
   // 상품목록
+  @ApiOperation(ProductsAPIDocs.getAllProductsOperation())
+  @ApiResponse(ProductsAPIDocs.getAllProductsResponse())
+  @Public()
   @Get('/')
   getAllProducts() {
     return this.productsService.getAllProducts();
   }
 
   // 상품상세 페이지
+  @ApiOperation(ProductsAPIDocs.getProductOperation())
+  @ApiParam(ProductsAPIDocs.getProductParam())
+  @ApiResponse(ProductsAPIDocs.getProductResponse())
+  @ApiUnauthorizedResponse(ProductsAPIDocs.getProductUnauthorizedResponse())
   @Get('/:product_id')
   getProduct(@Param('product_id') product_id: string) {
     return this.productsService.getProduct(product_id);
