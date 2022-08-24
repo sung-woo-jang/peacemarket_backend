@@ -13,6 +13,7 @@ import { Product } from './product.entity';
 @Entity()
 export class Image extends BaseEntity {
   @ApiProperty({
+    example: '77be1264-86c8-4363-9259-d4766edeaa43',
     description: 'id - 자동생성',
     required: true,
   })
@@ -32,7 +33,10 @@ export class Image extends BaseEntity {
   createdAt: Date;
 
   // 판매자
-  @ApiProperty({ type: () => Product })
+  @ApiProperty({
+    type: () => Product,
+    example: 'eafd837d-9d2e-439f-90d2-e0160e6bd2f3',
+  })
   @ManyToOne(() => Product, (product) => product.images)
   product: Product;
 }

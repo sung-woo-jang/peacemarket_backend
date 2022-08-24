@@ -15,11 +15,15 @@ import { User } from 'src/domain/users/entities/user.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { ProductsService } from '../service/products.service';
 import { registProductMulterOption } from 'src/util/multer.options';
+import { ProductsAPIDocs } from '../docs/products.docs';
+import { ApiCreatedResponse, ApiOperation } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
   // 상품 등록
+  @ApiOperation(ProductsAPIDocs.registProductOperation())
+  @ApiCreatedResponse(ProductsAPIDocs.registProductCreatedResponse())
   @Post('/regist')
   @UseInterceptors(FilesInterceptor('images', 8, registProductMulterOption))
   async registProduct(
