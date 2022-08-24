@@ -48,10 +48,12 @@ export class EmailService {
       return { expiresTime: user.expiresTime };
     } else {
       // db에 정보가 없을 때
-      return await this.emailRepository.createEmailAuth(
+      const user = await this.emailRepository.createEmailAuth(
         emailAuthDto,
         signupVerifyToken,
       );
+
+      return { expiresTime: user.expiresTime };
     }
   }
 

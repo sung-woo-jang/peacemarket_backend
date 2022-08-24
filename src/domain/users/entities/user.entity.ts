@@ -21,6 +21,7 @@ import { UserRole } from './user.role.enum';
 @Entity()
 export class User extends BaseEntity {
   @ApiProperty({
+    example: '5de1a3f3-58f5-41eb-b3db-d8a7e7f90db3',
     description: 'id - 자동생성',
     required: true,
   })
@@ -77,7 +78,7 @@ export class User extends BaseEntity {
   createdAt: Date;
 
   @ApiProperty({
-    enum: ['ADMIN', 'USER'],
+    enum: UserRole,
     description: '사용자 권한',
     required: true,
   })
@@ -85,6 +86,7 @@ export class User extends BaseEntity {
   @IsNotEmpty()
   role: UserRole;
 
+  @ApiProperty({ type: () => Product })
   @OneToMany(() => Product, (product) => product.user)
   product: Product[];
 }

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/domain/users/entities/user.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
+import { ImagesRepository } from '../repository/images.repository';
 import { ProductsRepository } from '../repository/products.repository';
 
 @Injectable()
@@ -9,10 +10,26 @@ export class ProductsService {
   constructor(
     @InjectRepository(ProductsRepository)
     private productsRepository: ProductsRepository,
+
+    @InjectRepository(ImagesRepository)
+    private imagesRepository: ImagesRepository,
   ) {}
 
-  async registProduct(user: User, createProductDto: CreateProductDto) {
-    return await this.productsRepository.registProduct(user, createProductDto);
+  async registProduct(
+    user: User,
+    createProductDto: CreateProductDto,
+    files: Express.Multer.File[],
+  ) {
+    const board = await this.productsRepository.registProduct(
+      user,
+      createProductDto,
+    );
+    const image = await this.imagesRepository.saveProductImagePath(
+      files,
+      board,
+    );
+    const result = { ...board, images_id: [...image.map((el) => el.image_id)] };
+    return result;
   }
 
   async getAllProducts() {

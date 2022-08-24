@@ -16,7 +16,9 @@ export class UsersService {
     const user = await this.emailService.emailExists(createUserDto.email);
 
     if (user && user.status)
-      throw new UnauthorizedException(`이메일 인증이 되지 않은 계정입니다.`);
+      throw new UnauthorizedException(
+        `이미 가입된 계정입니다. 이메일 인증을 완료해주세요.`,
+      );
 
     await this.usersRepository.checkUserExistsByEmail(createUserDto.email);
     await this.usersRepository.checkUserExistsByNickname(

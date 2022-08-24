@@ -8,7 +8,6 @@ import { Product } from '../entities/product.entity';
 export class ProductsRepository extends Repository<Product> {
   async registProduct(user: User, createProductDto: CreateProductDto) {
     const { category, description, price, title } = createProductDto;
-
     const categoryEnum = +ProductCategory[`${category}`];
     const userId = user['userId'];
 
@@ -19,6 +18,7 @@ export class ProductsRepository extends Repository<Product> {
       title,
       user: userId,
     }).save();
+
     return board;
   }
 }
