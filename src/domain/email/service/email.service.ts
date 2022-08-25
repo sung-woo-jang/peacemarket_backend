@@ -4,15 +4,20 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
+import { UsersRepository } from 'src/domain/users/repository/users.repository';
 import { EmailAuthDto } from '../dto/emailAuth.dto';
 import { EmailCodeDto } from '../dto/emailCode.dto';
 import { EmailRepository } from '../repository/email.repository';
 
 @Injectable()
 export class EmailService {
+  async existsByEmail(email: string) {
+    await this.usersRepository.checkUserExistsByEmail(email);
+  }
   constructor(
     private readonly mailerService: MailerService,
     private emailRepository: EmailRepository,
+    private usersRepository: UsersRepository,
   ) {}
   async sendMemberJoinVerification(email: string, signupVerifyToken: string) {
     const mailOptions = {
@@ -28,6 +33,8 @@ export class EmailService {
   }
 
   async sendAuthCodeToEmail(emailAuthDto: EmailAuthDto) {
+    await this.existsByEmail(emailAuthDto.email);
+
     const signupVerifyToken = String(Math.random().toString(36).slice(2));
     const user = await this.emailExists(emailAuthDto.email);
 
@@ -59,6 +66,10 @@ export class EmailService {
 
   async confirmEmailAuthCode(emailCodeDto: EmailCodeDto) {
     const user = await this.emailExists(emailCodeDto.email);
+    console.log(user);
+    if (user === undefined) {
+      throw new UnauthorizedException();
+    }
 
     if (emailCodeDto.signupVerifyToken !== user.signupVerifyToken)
       throw new UnauthorizedException('토큰값이 다릅니다.');

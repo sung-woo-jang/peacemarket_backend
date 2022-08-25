@@ -3,6 +3,7 @@ import { PugAdapter } from '@nestjs-modules/mailer/dist/adapters/pug.adapter';
 import { Module } from '@nestjs/common';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersRepository } from '../users/repository/users.repository';
 import { EmailController } from './controller/email.controller';
 import { EmailRepository } from './repository/email.repository';
 import { EmailService } from './service/email.service';
@@ -32,7 +33,7 @@ import { EmailService } from './service/email.service';
         },
       }),
     }),
-    TypeOrmModule.forFeature([EmailRepository]),
+    TypeOrmModule.forFeature([EmailRepository, UsersRepository]),
   ],
   providers: [EmailService],
   exports: [EmailService],
