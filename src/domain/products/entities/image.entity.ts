@@ -27,7 +27,9 @@ export class Image extends BaseEntity {
   imgUrl: string;
 
   // 등록시간
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamptz',
+  })
   @IsDate()
   @IsNotEmpty()
   createdAt: Date;

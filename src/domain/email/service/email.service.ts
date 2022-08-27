@@ -66,7 +66,7 @@ export class EmailService {
 
   async confirmEmailAuthCode(emailCodeDto: EmailCodeDto) {
     const user = await this.emailExists(emailCodeDto.email);
-    console.log(user);
+
     if (user === undefined) {
       throw new UnauthorizedException();
     }

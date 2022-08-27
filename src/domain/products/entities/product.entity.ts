@@ -65,7 +65,9 @@ export class Product extends BaseEntity {
     description: '게시글',
     required: true,
   })
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamptz',
+  })
   @IsDate()
   @IsNotEmpty()
   createdAt: Date;

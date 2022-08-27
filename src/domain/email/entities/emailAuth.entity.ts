@@ -30,7 +30,10 @@ export class Email extends BaseEntity {
     description: '만료시간 - 3분',
     required: true,
   })
-  @Column({ default: new Date(Date.now() + 3 * 60 * 1000) })
+  @Column({
+    default: new Date(Date.now() + 3 * 60 * 1000),
+    type: 'timestamptz',
+  })
   expiresTime: Date;
 
   @ApiProperty({
