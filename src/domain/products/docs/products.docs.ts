@@ -1,4 +1,42 @@
 export class ProductsAPIDocs {
+  static deleteProductResponse() {
+    return {
+      description: '상품 게시글 삭제 완료',
+      status: 200,
+      schema: {
+        example: {
+          success: true,
+        },
+      },
+    };
+  }
+  static deleteProductParam() {
+    return {
+      name: 'product_id',
+      example: 'eafd837d-9d2e-439f-90d2-e0160e6bd2f3',
+    };
+  }
+  static deleteProductNotFoundResponse() {
+    return {
+      description: '찾을 수 없는 게시물',
+      schema: {
+        example: {
+          success: false,
+          error: {
+            statusCode: 404,
+            message: '게시물을 찾을 수 없습니다.',
+            error: 'Not Found',
+          },
+        },
+      },
+    };
+  }
+  static deleteProductOperation() {
+    return {
+      summary: '상품 게시물 삭제',
+      description: '상품 게시물을 삭제합니다.',
+    };
+  }
   static updateProductNotFoundResponse() {
     return {
       description: '찾을 수 없는 게시물',

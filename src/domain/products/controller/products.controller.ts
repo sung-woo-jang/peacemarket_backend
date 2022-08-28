@@ -90,6 +90,10 @@ export class ProductsController {
   }
 
   // 상품 삭제
+  @ApiOperation(ProductsAPIDocs.deleteProductOperation())
+  @ApiParam(ProductsAPIDocs.deleteProductParam())
+  @ApiResponse(ProductsAPIDocs.deleteProductResponse())
+  @ApiNotFoundResponse(ProductsAPIDocs.deleteProductNotFoundResponse())
   @Delete('/delete/:product_id')
   deleteProduct(@Param('product_id') product_id: string, @Req() req: Request) {
     return this.productsService.deleteProduct(product_id, req.user);
