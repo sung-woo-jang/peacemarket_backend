@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/domain/users/entities/user.entity';
 import { CreateProductDto } from '../dto/create-product.dto';
+import { UpdateProductDto } from '../dto/update-product.dto';
 import { ImagesRepository } from '../repository/images.repository';
 import { ProductsRepository } from '../repository/products.repository';
 
@@ -64,13 +65,21 @@ export class ProductsService {
       .getRawOne();
   }
 
-  async updateProduct() {
-    return '';
+  async updateProduct(
+    product_id: string,
+    updateProductDto: UpdateProductDto,
+    user,
+  ) {
+    return await this.productsRepository.modify(
+      product_id,
+      updateProductDto,
+      user,
+    );
   }
 
   // 상품 삭제
 
-  async deleteProduct() {
-    return '';
+  async deleteProduct(product_id: string, user) {
+    return this.productsRepository.deleteProduct(product_id, user);
   }
 }

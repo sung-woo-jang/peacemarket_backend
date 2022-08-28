@@ -72,7 +72,9 @@ export class User extends BaseEntity {
     description: '계정 생성일',
     required: true,
   })
-  @CreateDateColumn()
+  @CreateDateColumn({
+    type: 'timestamptz',
+  })
   @IsDate()
   @IsNotEmpty()
   createdAt: Date;

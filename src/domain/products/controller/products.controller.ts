@@ -8,6 +8,8 @@ import {
   Param,
   UseInterceptors,
   UploadedFiles,
+  Req,
+  HttpCode,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/decorator/get-user.decorator';
@@ -17,15 +19,19 @@ import { ProductsService } from '../service/products.service';
 import { registProductMulterOption } from 'src/util/multer.options';
 import { ProductsAPIDocs } from '../docs/products.docs';
 import {
-  ApiCookieAuth,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Public } from 'src/decorator/skip-auth.decorator';
+import { UpdateProductDto } from '../dto/update-product.dto';
+import { Request } from 'express';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -66,14 +72,30 @@ export class ProductsController {
   }
 
   // 상품정보 수정
-  @Patch('/:id')
-  updateProduct() {
-    return this.productsService.updateProduct();
+  @ApiOperation(ProductsAPIDocs.updateProductOperation())
+  @ApiParam(ProductsAPIDocs.updateProductParam())
+  @ApiResponse(ProductsAPIDocs.updateProductResponse())
+  @ApiNotFoundResponse(ProductsAPIDocs.updateProductNotFoundResponse())
+  @Patch('/update/:product_id')
+  async updateProduct(
+    @Param('product_id') product_id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @Req() req: Request,
+  ) {
+    return await this.productsService.updateProduct(
+      product_id,
+      updateProductDto,
+      req.user,
+    );
   }
 
   // 상품 삭제
-  @Delete()
-  deleteProduct() {
-    return this.productsService.deleteProduct();
+  @ApiOperation(ProductsAPIDocs.deleteProductOperation())
+  @ApiParam(ProductsAPIDocs.deleteProductParam())
+  @ApiResponse(ProductsAPIDocs.deleteProductResponse())
+  @ApiNotFoundResponse(ProductsAPIDocs.deleteProductNotFoundResponse())
+  @Delete('/delete/:product_id')
+  deleteProduct(@Param('product_id') product_id: string, @Req() req: Request) {
+    return this.productsService.deleteProduct(product_id, req.user);
   }
 }
