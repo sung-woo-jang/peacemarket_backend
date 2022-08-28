@@ -1,4 +1,59 @@
 export class ProductsAPIDocs {
+  static updateProductNotFoundResponse() {
+    return {
+      description: '찾을 수 없는 게시물',
+      schema: {
+        example: {
+          success: false,
+          error: {
+            statusCode: 404,
+            message: '게시물을 찾을 수 없습니다.',
+            error: 'Not Found',
+          },
+        },
+      },
+    };
+  }
+  static updateProductResponse() {
+    return {
+      description: '상품 수정 완료',
+      status: 200,
+      schema: {
+        example: {
+          success: true,
+          data: {
+            product_id: '5e18cbb1-f0db-4bec-870c-d61f315938c4',
+            title: '맥북 팔아요',
+            description: '벽돌 보내드릴게요',
+            price: 50000,
+            status: true,
+            createdat: '2022-08-27T02:13:05.826Z',
+            category: '3',
+            user_id: '79895177-0628-4d07-a164-c05dae857cc3',
+            email: 'sseastory624@gmail.com',
+            password:
+              '$2a$10$3bSQCBRIjFoyoMaDCmU9b.zGsCTnjEixEK09TjpjQfm78NgNfF2sW',
+            nickname: 'sgyomdyung',
+            imgurl:
+              'http://itimg.chosun.com/sitedata/image/202102/09/2021020902484_0.jpg',
+            role: 'USER',
+          },
+        },
+      },
+    };
+  }
+  static updateProductParam() {
+    return {
+      name: 'product_id',
+      example: 'eafd837d-9d2e-439f-90d2-e0160e6bd2f3',
+    };
+  }
+  static updateProductOperation() {
+    return {
+      summary: '상품 정보 수정',
+      description: '상품 정보들을 수정합니다.',
+    };
+  }
   static registProductOperation() {
     return {
       summary: '상품 등록',

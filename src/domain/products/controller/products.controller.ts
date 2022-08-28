@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFiles,
   Req,
+  HttpCode,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/decorator/get-user.decorator';
@@ -19,15 +20,18 @@ import { registProductMulterOption } from 'src/util/multer.options';
 import { ProductsAPIDocs } from '../docs/products.docs';
 import {
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOperation,
   ApiParam,
   ApiResponse,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Public } from 'src/decorator/skip-auth.decorator';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Request } from 'express';
 
+@ApiTags('products')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -68,13 +72,17 @@ export class ProductsController {
   }
 
   // 상품정보 수정
+  @ApiOperation(ProductsAPIDocs.updateProductOperation())
+  @ApiParam(ProductsAPIDocs.updateProductParam())
+  @ApiResponse(ProductsAPIDocs.updateProductResponse())
+  @ApiNotFoundResponse(ProductsAPIDocs.updateProductNotFoundResponse())
   @Patch('/update/:product_id')
-  updateProduct(
+  async updateProduct(
     @Param('product_id') product_id: string,
     @Body() updateProductDto: UpdateProductDto,
     @Req() req: Request,
   ) {
-    return this.productsService.updateProduct(
+    return await this.productsService.updateProduct(
       product_id,
       updateProductDto,
       req.user,
