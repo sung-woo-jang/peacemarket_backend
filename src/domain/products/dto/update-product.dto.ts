@@ -1,19 +1,10 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ProductCategory } from '../entities/category.enum';
+import { PickType } from '@nestjs/swagger';
+import { Product } from '../entities/product.entity';
 
-export class UpdateProductDto {
-  @ApiProperty()
-  title: string;
-
-  @ApiProperty()
-  description: string;
-
-  @ApiProperty()
-  price: number;
-
-  @ApiProperty()
-  status: boolean;
-
-  @ApiProperty()
-  category: ProductCategory;
-}
+export class UpdateProductDto extends PickType(Product, [
+  'title',
+  'description',
+  'price',
+  'status',
+  'category',
+] as const) {}

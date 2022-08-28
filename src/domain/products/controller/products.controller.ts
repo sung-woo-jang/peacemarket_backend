@@ -8,6 +8,7 @@ import {
   Param,
   UseInterceptors,
   UploadedFiles,
+  Req,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { GetUser } from 'src/decorator/get-user.decorator';
@@ -17,7 +18,6 @@ import { ProductsService } from '../service/products.service';
 import { registProductMulterOption } from 'src/util/multer.options';
 import { ProductsAPIDocs } from '../docs/products.docs';
 import {
-  ApiCookieAuth,
   ApiCreatedResponse,
   ApiOperation,
   ApiParam,
@@ -25,6 +25,8 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { Public } from 'src/decorator/skip-auth.decorator';
+import { UpdateProductDto } from '../dto/update-product.dto';
+import { Request } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -66,9 +68,17 @@ export class ProductsController {
   }
 
   // 상품정보 수정
-  @Patch('/:id')
-  updateProduct() {
-    return this.productsService.updateProduct();
+  @Patch('/update/:product_id')
+  updateProduct(
+    @Param('product_id') product_id: string,
+    @Body() updateProductDto: UpdateProductDto,
+    @Req() req: Request,
+  ) {
+    return this.productsService.updateProduct(
+      product_id,
+      updateProductDto,
+      req.user,
+    );
   }
 
   // 상품 삭제
