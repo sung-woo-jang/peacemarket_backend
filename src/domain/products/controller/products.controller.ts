@@ -82,8 +82,8 @@ export class ProductsController {
   }
 
   // 상품 삭제
-  @Delete()
-  deleteProduct() {
-    return this.productsService.deleteProduct();
+  @Delete('/delete/:product_id')
+  deleteProduct(@Param('product_id') product_id: string, @Req() req: Request) {
+    return this.productsService.deleteProduct(product_id, req.user);
   }
 }

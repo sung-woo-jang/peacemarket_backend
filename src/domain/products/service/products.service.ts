@@ -79,7 +79,7 @@ export class ProductsService {
 
   // 상품 삭제
 
-  async deleteProduct() {
-    return '';
+  async deleteProduct(product_id: string, user) {
+    return this.productsRepository.deleteProduct(product_id, user);
   }
 }

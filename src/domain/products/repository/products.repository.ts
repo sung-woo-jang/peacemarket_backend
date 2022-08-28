@@ -57,4 +57,38 @@ export class ProductsRepository extends Repository<Product> {
 
     return product;
   }
+
+  async deleteProduct(product_id: string, user: any) {
+    const result = await this.delete(product_id);
+
+    if (result.affected === 0)
+      throw new NotFoundException('게시물을 찾을 수 없습니다.');
+  }
+
+  // async getProduct(product_id: string, user) {
+  //   const product = await this.createQueryBuilder('product')
+  //     .leftJoinAndSelect('product.user', 'user')
+  //     .where('product.userId = :userId', { userId: user.userId })
+  //     .andWhere('product_id = :product_id', { product_id })
+  //     .select([
+  //       'product.product_id AS product_id',
+  //       'product.title AS title',
+  //       'product.description AS description',
+  //       'product.price AS price',
+  //       'product.status AS status',
+  //       'product.createdAt AS createdAt',
+  //       'product.category AS category',
+  //       'user.id AS user_id',
+  //       'user.email AS email',
+  //       'user.password AS password',
+  //       'user.nickname AS nickname',
+  //       'user.imgUrl AS imgUrl',
+  //       'user.createdAt AS createdAt',
+  //       'user.role AS role',
+  //     ])
+  //     .getRawOne();
+
+  //   if (product === undefined)
+  //     throw new NotFoundException('게시물을 찾을 수 없습니다.');
+  // }
 }
