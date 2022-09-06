@@ -15,13 +15,13 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { LocalAuthGuard } from 'src/domain/auth/guard/local-auth.guard';
 import { Public } from 'src/decorator/skip-auth.decorator';
 import { Request, Response } from 'express';
 import { AuthService } from 'src/domain/auth/service/auth.service';
 import { CreateUserDto } from '../dto/request/create-user.dto';
 import { UsersService } from '../service/users.service';
 import { UsersAPIDocs } from '../docs/users.docs';
+import { LoginRequestDto } from '../dto/request/login-request.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -43,11 +43,17 @@ export class UsersController {
 
   @ApiOperation(UsersAPIDocs.loginOperation())
   @ApiUnauthorizedResponse(UsersAPIDocs.loginUnauthorizedResponse())
-  @UseGuards(LocalAuthGuard)
   @Public()
   @Post('/login')
-  async login(@Req() req, @Res({ passthrough: true }) res: Response) {
-    const token = await this.authService.login(req.user);
+  async login(
+    @Req() req,
+    @Res({ passthrough: true }) res: Response,
+    @Body() loginRequestDto: LoginRequestDto,
+  ) {
+    const token = await this.authService.login(
+      loginRequestDto.email,
+      loginRequestDto.password,
+    );
     res.cookie('jwt', token, {
       httpOnly: true,
       maxAge: +process.env.JWT_EXPRIESIN,
